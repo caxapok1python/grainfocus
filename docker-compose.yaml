@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    restart: always
+    volumes:
+      - ./backend/app:/app/app:ro
+      - ./database.sqlite:/app/data/database.sqlite
+    environment:
+      - SQLITE_PATH=/app/data/database.sqlite
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    restart: always
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+
+  camera:
+    build:
+      context: ./camera
+    container_name: camera
+    restart: always
+    environment:
+      - BACKEND_URL=http://backend:8000/camera
+    devices:
+      - "/dev/video0:/dev/video0"
+    depends_on:
+      backend:
+        condition: service_healthy
