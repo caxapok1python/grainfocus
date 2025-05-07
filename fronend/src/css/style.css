@@ -274,6 +274,7 @@
   top: 255px;
   left: 405px;
   object-fit: cover;
+  border-radius: 20px;
 }
 
 .main .graph-box {
