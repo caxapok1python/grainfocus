@@ -3,7 +3,7 @@ from flask import Flask, render_template, send_from_directory, url_for, jsonify
 
 app = Flask(
     __name__,
-    template_folder='.',      # корень папки app
+    template_folder='.',      # корень папки web
     static_folder=None        # отключаем default-static
 )
 
