@@ -1,5 +1,7 @@
 from utils import get_image
 from detector import Detector
 
-detector = Detector('/Users/caxapok/Desktop/GrainFocus/best.pt')
-detector.process(get_image())
+detector = Detector('./yolo11x.pt')
+
+while True:
+    detector.process(get_image())

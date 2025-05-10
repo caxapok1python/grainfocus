@@ -3,12 +3,11 @@ version: "3.8"
 services:
   backend:
     build:
-      context: ./backend
+      context: ./web
     container_name: backend
     restart: unless-stopped
     volumes:
-      - ./web:/app/app:ro
-      - ./detector_output:/detector:ro
+      - ./web:/app/app
     ports:
       - "8080:8080"
     healthcheck:
@@ -16,15 +15,3 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-
-  detector:
-    build:
-      context: ./detector
-    container_name: detector
-    restart: always
-    volumes:
-      - ./detector:/app:ro
-      - ./best.pt:/app/best.pt:ro
-      - ./detector_output:/output
-    devices:
-      - "/dev/video0:/dev/video0"

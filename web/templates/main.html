@@ -318,6 +318,9 @@
         border-radius: 20px;
     }
 </style>
+<script>
+    setInterval(() => location.reload(), 5000);
+</script>
 <body>
 <div class="main">
     <div class="overlap-wrapper">
@@ -362,8 +365,81 @@
                 <div class="text-wrapper-6">Сорные включения</div>
             </div>
             <a href="/camera-view">
-                <img class="image-box" src="img/test.jpg"/></a>
-            <div class="graph-box"></div>
+                <img class="image-box" src="../share/detection/image.png"/></a>
+            <div class="graph-box">
+                <script src="../share/js/chart.js"></script>
+                <canvas id="combinedChart"></canvas>
+                <script>
+                    async function fetchMetrics() {
+                        const resp = await fetch('/api/metrics');
+                        return resp.ok ? resp.json() : Promise.reject(resp.statusText);
+                    }
+
+                    function createCombinedChart(ctx, time, weed, broken) {
+                        return new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: time,
+                                datasets: [
+                                    {
+                                        label: 'Сорные включения, %',
+                                        data: weed,
+                                        borderColor: 'rgb(222,194,48)',
+                                        backgroundColor: 'rgba(222,194,48,0.2)',
+                                        tension: 0.3,
+                                        fill: false,
+                                        pointRadius: 4
+                                    },
+                                    {
+                                        label: 'Дробное зерно, %',
+                                        data: broken,
+                                        borderColor: 'rgb(214,119,117)',
+                                        backgroundColor: 'rgba(214,119,117,0.2)',
+                                        tension: 0.3,
+                                        fill: false,
+                                        pointRadius: 4
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        type: 'linear',
+                                        title: {display: true, text: 'Время, мин'},
+                                        ticks: {callback: v => v + ' мин'},
+                                        grid: {display: true}
+                                    },
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {display: true, text: 'Процент, %'},
+                                        ticks: {callback: v => v + '%'},
+                                        grid: {color: 'rgba(0,0,0,0.05)'}
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%`
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    window.addEventListener('DOMContentLoaded', async () => {
+                        try {
+                            const {time, weed, broken} = await fetchMetrics();
+                            const ctx = document.getElementById('combinedChart').getContext('2d');
+                            createCombinedChart(ctx, time, weed, broken);
+                        } catch (err) {
+                            console.error('Ошибка при загрузке метрик:', err);
+                        }
+                    });
+                </script>
+            </div>
         </div>
     </div>
 </div>
