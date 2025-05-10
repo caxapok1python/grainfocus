@@ -42,7 +42,7 @@ def get_readings(db: DBSession, session_id: int):
           .all()
     )
 
-def get_last_session(db: DBSession) -> models.Session | None:
+def get_last_session(db: DBSession):
     """
     Возвращает самую недавно созданную сессию (по start_ts).
     """
