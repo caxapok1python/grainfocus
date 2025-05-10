@@ -1,9 +1,12 @@
 from pprint import pprint
+import requests
 
 import numpy as np
 from ultralytics import YOLO
 import cv2
 import os
+
+
 
 
 class Detector:
@@ -17,12 +20,34 @@ class Detector:
         annotated = self.draw_boxes(img, res)
         cv2.imwrite('../web/share/detection/annotated.png', annotated)
         cv2.imwrite('../web/share/detection/image.png', img)
+        # 3) Считаем объекты по классам
         cls_ids = res[0].boxes.cls.cpu().numpy().astype(int)
-        cls = np.bincount(cls_ids)
-        data =f"{cls[0]},{cls[1]},{cls[2]}"
+        # np.bincount вернёт array длиной max(cls_ids)+1
+        counts = np.bincount(cls_ids, minlength=3)
+        # Сортируем по заранее определённому порядку классов: [broken, weed]
+        broken_cnt, weed_cnt = counts[0], counts[1]
+        total = sum(counts)
+
+        broken_pct = round(broken_cnt / total * 100, 1)
+        weed_pct = round(weed_cnt / total * 100, 1)
+
+        # 4) Пишем текстовый файл
+        data_line = f"{broken_cnt},{weed_cnt},{total}"
         with open('../web/share/detection/classes.txt', 'w') as f:
-            f.write(data)
-        pprint(data)
+            f.write(data_line)
+
+        pprint(data_line)
+
+        payload = {"weed_pct": weed_pct, "broken_pct": broken_pct}
+        try:
+            resp = requests.post(
+                "http://localhost:8080/api/session/latest/add",
+                json=payload,
+                timeout=2
+            )
+            resp.raise_for_status()
+        except Exception as e:
+            print("Failed to send reading:", e)
 
     def draw_boxes(self, img, results):
         img = img.copy()
