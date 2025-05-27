@@ -25,7 +25,7 @@ async function updateImages() {
     document.getElementById('img-raw').src = `${raw}?t=${ts}`;
     // Assuming 'img-annot' might still be needed or was for a different view
     // If not, this line can be removed.
-    // document.getElementById('img-annot').src = `${annot}?t=${ts}`;
+    document.getElementById('image-box').src = `${annot}?t=${ts}`;
 }
 
 // Инициализация графиков Chart.js
