@@ -160,7 +160,7 @@
 
     .main .stats-title-wrapper {
         position: absolute;
-        width: 133px;
+        width: 163px;
         height: 24px;
         top: 7px;
         left: 7px;
@@ -170,7 +170,7 @@
 
     .main .stats-title {
         position: absolute;
-        width: 121px;
+        width: 163px;
         top: 3px;
         left: 6px;
         font-family: "Inter-SemiBold", Helvetica;
@@ -313,14 +313,13 @@
         width: 389px;
         height: 239px;
         top: 66px;
-        left: 5px;
+        left: 7px;
         background-color: #f4e7d5;
         border-radius: 20px;
     }
+
 </style>
-<!--<script>-->
-<!--    setInterval(() => location.reload(), 5000);-->
-<!--</script>-->
+<script src="../share/js/chartjs-plugin-annotation.min.js"></script>
 <script src="../share/js/chart.js"></script>
 <script src="../share/js/main.js"></script>
 <body>
@@ -344,7 +343,7 @@
                 <div class="text-wrapper-2">Дробные зерна</div>
                 <div class="text-wrapper-3">Сорные включения</div>
                 <div class="stats-title-wrapper">
-                    <div class="stats-title">Диапазон потерь</div>
+                    <div class="stats-title">Диапазон включений</div>
                 </div>
             </div>
             <div class="overlap-3">
@@ -368,8 +367,9 @@
             </div>
             <a href="/camera-view">
                 <img class="image-box" id="img-raw" src=""/></a>
-            <div class="graph-box">
-                <canvas id="combinedChart"></canvas>
+            <div class="graph-box" style="display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;">
+                <div class="graph-box-weed" style="width: 99%; height: 110px;" ><canvas id="weedChart"></canvas></div>
+                <div class="graph-box-broken" style="width: 99%; height: 110px; margin-top: 8px;"><canvas id="brokenChart"></canvas></div>
         </div>
     </div>
 </div>

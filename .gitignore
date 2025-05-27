@@ -2,4 +2,4 @@
 
 .env
 database.sqlite
-/detector/images/
+/detector/images_old/

@@ -12,14 +12,16 @@ import os
 class Detector:
     allowed_classes = {0, 1}
     dirname = os.path.dirname(__file__)
+    
     def __init__(self, weights='yolo11x.pt'):
         self.model = YOLO(weights)
 
-    def process(self, img):
-        res = self.model(img)
-        annotated = self.draw_boxes(img, res)
+    def process(self, frame):
+        frame = cv2.resize(frame, (640, 640))
+        res = self.model(frame)
+        annotated = self.draw_boxes(frame, res)
         cv2.imwrite('../web/share/detection/annotated.png', annotated)
-        cv2.imwrite('../web/share/detection/image.png', img)
+        cv2.imwrite('../web/share/detection/image.png', frame)
         # 3) Считаем объекты по классам
         cls_ids = res[0].boxes.cls.cpu().numpy().astype(int)
         # np.bincount вернёт array длиной max(cls_ids)+1
