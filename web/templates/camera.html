@@ -3,7 +3,6 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta charset="utf-8"/>
-    <meta http-equiv="refresh" content="10">
 </head>
 <style>
     @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
@@ -258,8 +257,13 @@
 
 </style>
 <script>
-    setInterval(() => location.reload(), 5000);
-</script>
+    const img = document.getElementById('image-box');
+  
+    setInterval(() => {
+      // Добавляем параметр ?t=timestamp
+      img.src = '../share/detection/annotated.png?t=' + new Date().getTime();
+    }, 3000);
+  </script>
 <body>
 <div class="camera">
     <div class="overlap-group-wrapper">
@@ -272,7 +276,7 @@
                     </div>
                 </a>
             </div>
-            <img class="image-box" src="../share/detection/annotated.png"/>
+            <img class="image-box" id="image-box" src="../share/detection/annotated.png"+/>
             <div class="div">
                 <div class="text-wrapper-2">Дробные зерна</div>
                 <div class="text-wrapper-3">Сорные включения</div>
