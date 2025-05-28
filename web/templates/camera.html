@@ -257,12 +257,25 @@
 
 </style>
 <script>
-    const img = document.getElementById('image-box');
-  
-    setInterval(() => {
-      // Добавляем параметр ?t=timestamp
-      img.src = '../share/detection/annotated.png?t=' + new Date().getTime();
-    }, 3000);
+    document.addEventListener('DOMContentLoaded', () => {
+      const img = document.getElementById('image-box');
+      if (!img) {
+        console.error('Не найден элемент #image-box');
+        return;
+      }
+
+      // Функция, меняющая src с таймстампом
+      function refreshPhoto() {
+        const t = Date.now();
+        img.src = '../share/detection/annotated.png?t=' + t;
+      }
+
+      // Первый вызов сразу (не ждать 3 сек)
+      refreshPhoto();
+
+      // А затем каждые 3 секунды
+      setInterval(refreshPhoto, 3000);
+    });
   </script>
 <body>
 <div class="camera">
