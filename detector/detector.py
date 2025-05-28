@@ -67,4 +67,3 @@ class Detector:
                 cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
         return img
 
-
